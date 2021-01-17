@@ -1,6 +1,6 @@
 {
   "name": "cfv",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CFV is a cross-platform node.js library that can extract the file version from a valid PE file (.exe)",
   "main": "dist/index.js",
   "repository": "git@github.com:zakuciael/cfv.git",
