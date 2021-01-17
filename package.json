@@ -7,6 +7,12 @@
   "author": "Krzysztof Saczuk <zakuciael@outlook.com>",
   "license": "MIT",
   "private": false,
+  "keywords": [
+    "cross-platform",
+    "file-version",
+    "file",
+    "info"
+  ],
   "scripts": {
     "start": "ts-node src/index.ts",
     "build": "tsc -p tsconfig.json",
