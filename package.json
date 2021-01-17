@@ -1,11 +1,11 @@
 {
-  "name": "ts-app",
+  "name": "file-version",
   "version": "1.0.0",
-  "description": "TypeScript App",
-  "main": "src/index.ts",
+  "description": "Cross-platform node.js library that can extract the file versions from a valid PE file (.exe)",
+  "main": "dist/index.js",
   "author": "Krzysztof Saczuk <zakuciael@outlook.com>",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "scripts": {
     "start": "ts-node src/index.ts",
     "build": "tsc -p tsconfig.json",
