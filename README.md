@@ -1,6 +1,6 @@
-# File Version
+# CFV
 
-Cross-platform node.js library that can extract the file versions from a valid PE file (.exe)
+CFV is a cross-platform node.js library that can extract the file version from a valid PE file (.exe)
 
 ## Disclaimer
 
