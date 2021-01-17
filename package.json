@@ -1,0 +1,25 @@
+{
+  "name": "ts-app",
+  "version": "1.0.0",
+  "description": "TypeScript App",
+  "main": "src/index.ts",
+  "author": "Krzysztof Saczuk <zakuciael@outlook.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src/**/*.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.13",
+    "@typescript-eslint/eslint-plugin": "^4.9.1",
+    "@typescript-eslint/parser": "^4.9.1",
+    "eslint": "^7.15.0",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-prettier": "^3.2.0",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  }
+}
