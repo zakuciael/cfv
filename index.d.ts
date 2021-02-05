@@ -13,6 +13,6 @@ export declare interface Properties extends Record<string, string | undefined> {
     ProductVersion?: string;
 }
 
-export declare const getFileVersion: (path: PathLike) => Promise<string>;
-export declare const getProductVersion: (path: PathLike) => Promise<string>;
-export declare const getFileProperties: (path: PathLike) => Promise<Properties>;
+export declare const getFileVersion: (path: File) => Promise<string>;
+export declare const getProductVersion: (path: File) => Promise<string>;
+export declare const getFileProperties: (path: File) => Promise<Properties>;
