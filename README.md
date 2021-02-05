@@ -10,10 +10,14 @@ If you are going to use this package please first ensure that all files are vali
 
 ## API
 
-### ``getFileVersion(path: PathLike): Promise<string>``
+### ``getFileVersion(path: PathLike | Buffer): Promise<string>``
 
-``path`` - The path to the file that you want to extract the file version from.
+``path`` - Path to the file or a raw representation of it.
 
-### ``getFileVersion(data: Buffer): string``
+### ``getProductVersion(path: PathLike | Buffer): Promise<string>``
 
-``data`` - The raw representation of the file you want to extract the file version from.
+``path`` - Path to the file or a raw representation of it.
+
+### ``getFileProperties(path: PathLike | Buffer): Promise<Properties>``
+
+``path`` - Path to the file or a raw representation of it.
