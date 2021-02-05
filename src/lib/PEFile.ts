@@ -1,18 +1,23 @@
+import {
+    DataDirectory,
+    DIRECTORY_ENTRY,
+    DosHeader,
+    FileHeader,
+    FixedFileInfo,
+    NTHeader,
+    OptionalHeader,
+    RESOURCE_TYPE,
+    ResourceDataEntry,
+    ResourceDirectory,
+    ResourceEntry,
+    StringFileInfo,
+    StringTable,
+    StringTableEntry,
+    VersionInfo,
+} from "./structures";
+import { ResourceDataEntryData, ResourceDirData, ResourceDirEntryData } from "./container";
 import { UnicodeStringWrapperPostProcessor } from "./UnicodeStringWrapperPostProcessor";
-import { DataDirectory, DIRECTORY_ENTRY } from "./structures/DataDirectory";
-import { RESOURCE_TYPE, ResourceEntry } from "./structures/ResourceEntry";
-import { ResourceDataEntryData } from "./container/ResourceDataEntryData";
-import { ResourceDirEntryData } from "./container/ResourceDirEntryData";
-import { ResourceDirectory } from "./structures/ResourceDirectory";
-import { ResourceDataEntry } from "./structures/ResourceDataEntry";
-import { ResourceDirData } from "./container/ResourceDirData";
-import { OptionalHeader } from "./structures/OptionalHeader";
-import { FixedFileInfo } from "./structures/FixedFileInfo";
-import { VersionInfo } from "./structures/VersionInfo";
 import { SectionStructure } from "./SectionStructure";
-import { FileHeader } from "./structures/FileHeader";
-import { DosHeader } from "./structures/DosHeader";
-import { NTHeader } from "./structures/NTHeader";
 import { Unpack } from "./Unpack";
 
 const MAX_ASSUMED_VALID_NUMBER_OF_RVA_AND_SIZES = 0x100;
@@ -31,6 +36,7 @@ export class PEFile {
 
     public VS_VERSION_INFO: VersionInfo[] = [];
     public VS_FIXED_FILE_INFO: FixedFileInfo[] = [];
+    public FILE_INFO: StringFileInfo[][] = [];
 
     constructor(data: Buffer) {
         this.data = data;
@@ -358,6 +364,99 @@ export class PEFile {
         );
 
         this.VS_FIXED_FILE_INFO.push(fixedFileInfo);
+
+        const stringFileInfoOffset = this.alignDword(
+            fixedFileInfoOffset + fixedFileInfo.sizeof(),
+            versionStruct.OffsetToData
+        );
+
+        const fInfo: StringFileInfo[] = [];
+        const stringFileInfo = new StringFileInfo(startOffset + stringFileInfoOffset).unpack(
+            rawData.slice(stringFileInfoOffset)
+        );
+
+        const ustrOffset = versionStruct.OffsetToData + stringFileInfoOffset + versionInfo.sizeof();
+
+        const stringFileInfoString = this.getStringUAtRva(ustrOffset);
+        stringFileInfo.Key = stringFileInfoString;
+        fInfo.push(stringFileInfo);
+
+        if (stringFileInfoString.startsWith("StringFileInfo")) {
+            if ([0, 1].includes(stringFileInfo.Type) && stringFileInfo.ValueLength === 0) {
+                let stringTableOffset = this.alignDword(
+                    stringFileInfoOffset +
+                        stringFileInfo.sizeof() +
+                        2 * (stringFileInfoString.length + 1),
+                    versionStruct.OffsetToData
+                );
+
+                while (true) {
+                    const stringTable = new StringTable(startOffset + stringTableOffset).unpack(
+                        rawData.slice(stringTableOffset)
+                    );
+
+                    const ustrOffset =
+                        versionStruct.OffsetToData + stringTableOffset + stringTable.sizeof();
+                    const stringTableString = this.getStringUAtRva(ustrOffset);
+                    stringTable.LangID = stringTableString;
+                    stringFileInfo.StringTable.push(stringTable);
+
+                    let entryOffset = this.alignDword(
+                        stringTableOffset +
+                            stringTable.sizeof() +
+                            2 * (stringTableString.length + 1),
+                        versionStruct.OffsetToData
+                    );
+
+                    while (entryOffset < stringTableOffset + stringTable.Length) {
+                        const stringTableEntry = new StringTableEntry(
+                            startOffset + entryOffset
+                        ).unpack(rawData.slice(entryOffset));
+
+                        let ustrOffset =
+                            versionStruct.OffsetToData + entryOffset + stringTableEntry.sizeof();
+
+                        const key = this.getStringUAtRva(ustrOffset);
+                        const keyOffset = this.getOffsetFromRva(ustrOffset);
+                        let valueOffset = this.alignDword(
+                            2 * (key.length + 1) + entryOffset + stringTableEntry.sizeof(),
+                            versionStruct.OffsetToData
+                        );
+
+                        ustrOffset = versionStruct.OffsetToData + valueOffset;
+                        const value = this.getStringUAtRva(
+                            ustrOffset,
+                            stringTableEntry.ValueLength
+                        );
+                        valueOffset = this.getOffsetFromRva(ustrOffset);
+
+                        if (stringTableEntry.Length === 0)
+                            entryOffset = stringTableOffset + stringTable.Length;
+                        else
+                            entryOffset = this.alignDword(
+                                stringTableEntry.Length + entryOffset,
+                                versionStruct.OffsetToData
+                            );
+
+                        stringTable.entries[key] = value;
+                        stringTable.entriesOffsets[key] = [keyOffset, valueOffset];
+                        stringTable.entriesLengths[key] = [key.length, value.length];
+                    }
+
+                    const newStringTableOffset = this.alignDword(
+                        stringTable.Length + stringTableOffset,
+                        versionStruct.OffsetToData
+                    );
+
+                    if (newStringTableOffset === stringTableOffset) break;
+                    stringTableOffset = newStringTableOffset;
+
+                    if (stringTableOffset >= stringFileInfo.Length) break;
+                }
+            }
+        }
+
+        this.FILE_INFO.push(fInfo);
     }
 
     private parseResourceDataEntry(rva: number) {
