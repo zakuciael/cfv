@@ -3,7 +3,7 @@ import { FileHeader } from "./FileHeader";
 import { Structure } from "../Structure";
 import { Format } from "../Unpack";
 
-export const FORMAT: Format = [["I", "Signature"]];
+const FORMAT: Format = [["I", "Signature"]];
 
 export class NTHeader extends Structure {
     public Signature = 0;

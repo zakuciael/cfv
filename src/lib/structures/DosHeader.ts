@@ -1,7 +1,7 @@
 import { Structure } from "../Structure";
 import { Format } from "../Unpack";
 
-export const FORMAT: Format = [
+const FORMAT: Format = [
     ["H", "e_magic"],
     ["H", "e_cblp"],
     ["H", "e_cp"],

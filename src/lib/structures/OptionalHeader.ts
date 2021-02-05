@@ -2,7 +2,7 @@ import { DataDirectory } from "./DataDirectory";
 import { Structure } from "../Structure";
 import { Format } from "../Unpack";
 
-export const FORMAT: Format = [
+const FORMAT: Format = [
     ["H", "Magic"],
     ["B", "MajorLinkerVersion"],
     ["B", "MinorLinkerVersion"],
