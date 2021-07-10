@@ -34,6 +34,37 @@ const FORMAT: Format = [
     ["I", "LoaderFlags"],
     ["I", "NumberOfRvaAndSizes"],
 ];
+const FORMAT_x64: Format = [
+    ["H", "Magic"],
+    ["B", "MajorLinkerVersion"],
+    ["B", "MinorLinkerVersion"],
+    ["I", "SizeOfCode"],
+    ["I", "SizeOfInitializedData"],
+    ["I", "SizeOfUninitializedData"],
+    ["I", "AddressOfEntryPoint"],
+    ["I", "BaseOfCode"],
+    ["T", "ImageBase"],
+    ["I", "SectionAlignment"],
+    ["I", "FileAlignment"],
+    ["H", "MajorOperatingSystemVersion"],
+    ["H", "MinorOperatingSystemVersion"],
+    ["H", "MajorImageVersion"],
+    ["H", "MinorImageVersion"],
+    ["H", "MajorSubsystemVersion"],
+    ["H", "MinorSubsystemVersion"],
+    ["I", "Reserved1"],
+    ["I", "SizeOfImage"],
+    ["I", "SizeOfHeaders"],
+    ["I", "CheckSum"],
+    ["H", "Subsystem"],
+    ["H", "DllCharacteristics"],
+    ["T", "SizeOfStackReserve"],
+    ["T", "SizeOfStackCommit"],
+    ["T", "SizeOfHeapReserve"],
+    ["T", "SizeOfHeapCommit"],
+    ["I", "LoaderFlags"],
+    ["I", "NumberOfRvaAndSizes"],
+];
 
 export class OptionalHeader extends Structure {
     public Magic = 0;
@@ -68,7 +99,7 @@ export class OptionalHeader extends Structure {
     public NumberOfRvaAndSizes = 0;
     public DATA_DIRECTORY: DataDirectory[] = [];
 
-    constructor(fileOffset: number) {
-        super(FORMAT, fileOffset);
+    constructor(fileOffset: number, x64 = false) {
+        super(x64 ? FORMAT_x64 : FORMAT, fileOffset);
     }
 }

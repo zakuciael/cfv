@@ -2,7 +2,7 @@ export type Format = string[][];
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class Unpack {
-    private static readonly formatRegex = /(\d+)?([AxcbBhHsfdiIlL])/g;
+    private static readonly formatRegex = /(\d+)?([AxcbBhHsfdiIlLT])/g;
     private static readonly typeData: Record<string, number> = {
         A: 1,
         x: 1,
@@ -14,6 +14,7 @@ export class Unpack {
         s: 1,
         f: 4,
         d: 8,
+        T: 8,
         i: 4,
         I: 4,
         l: 4,
@@ -142,6 +143,15 @@ export class Unpack {
                             typeLength
                         )
                     );
+                    break;
+                case "T":
+                    out.push(
+                        Unpack.unpackSeries(
+                            Unpack.generateUnpackInt(isBigEndian, 8, false),
+                            data,
+                            offset,
+                            length,
+                            typeLength));
                     break;
             }
 
