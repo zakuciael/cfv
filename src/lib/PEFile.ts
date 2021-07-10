@@ -55,7 +55,8 @@ export class PEFile {
         const optionalHeaderOffset = ntHeadersOffset + 4 + this.FILE_HEADER.sizeof();
         const sectionsOffset = optionalHeaderOffset + this.FILE_HEADER.SizeOfOptionalHeader;
 
-        this.OPTIONAL_HEADER = new OptionalHeader(optionalHeaderOffset).unpack(
+        const is64bit = Unpack.unpack("<H", data, optionalHeaderOffset)[0] === 0x20b;
+        this.OPTIONAL_HEADER = new OptionalHeader(optionalHeaderOffset, is64bit).unpack(
             data.slice(optionalHeaderOffset, optionalHeaderOffset + 256)
         );
 
