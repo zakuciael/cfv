@@ -43,7 +43,7 @@ const FORMAT_x64: Format = [
     ["I", "SizeOfUninitializedData"],
     ["I", "AddressOfEntryPoint"],
     ["I", "BaseOfCode"],
-    ["T", "ImageBase"],
+    ["Q", "ImageBase"],
     ["I", "SectionAlignment"],
     ["I", "FileAlignment"],
     ["H", "MajorOperatingSystemVersion"],
