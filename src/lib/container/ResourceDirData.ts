@@ -1,5 +1,5 @@
-import { ResourceDirectory } from "../structures/ResourceDirectory";
 import { ResourceDirEntryData } from "./ResourceDirEntryData";
+import { ResourceDirectory } from "../structures";
 
 export class ResourceDirData {
     public struct: ResourceDirectory;

@@ -1,7 +1,7 @@
 import { UnicodeStringWrapperPostProcessor } from "../UnicodeStringWrapperPostProcessor";
 import { ResourceDataEntryData } from "./ResourceDataEntryData";
-import { ResourceEntry } from "../structures/ResourceEntry";
 import { ResourceDirData } from "./ResourceDirData";
+import { ResourceEntry } from "../structures";
 
 export class ResourceDirEntryData {
     public struct: ResourceEntry;

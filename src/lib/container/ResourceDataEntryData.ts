@@ -1,4 +1,4 @@
-import { ResourceDataEntry } from "../structures/ResourceDataEntry";
+import { ResourceDataEntry } from "../structures";
 
 export class ResourceDataEntryData {
     public struct: ResourceDataEntry;
