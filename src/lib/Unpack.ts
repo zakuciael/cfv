@@ -2,7 +2,7 @@ export type Format = string[][];
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class Unpack {
-    private static readonly formatRegex = /(\d+)?([AxcbBhHsfdiIlLT])/g;
+    private static readonly formatRegex = /(\d+)?([AxcbBhHsfdiIlLQ])/g;
     private static readonly typeData: Record<string, number> = {
         A: 1,
         x: 1,
