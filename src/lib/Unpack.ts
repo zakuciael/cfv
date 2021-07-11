@@ -144,7 +144,7 @@ export class Unpack {
                         )
                     );
                     break;
-                case "T":
+                case "Q":
                     out.push(
                         Unpack.unpackSeries(
                             Unpack.generateUnpackInt(isBigEndian, 8, false),
