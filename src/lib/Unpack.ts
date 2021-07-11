@@ -14,7 +14,7 @@ export class Unpack {
         s: 1,
         f: 4,
         d: 8,
-        T: 8,
+        Q: 8,
         i: 4,
         I: 4,
         l: 4,
